@@ -20,8 +20,8 @@
     {% for project in projects %}
     <div class="col-md-6 col-lg-4">
       <div class="card h-100 border-0 shadow-sm">
-        {% if project.image %}
-        <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}">
+        {% if project.cover_image %}
+        <img src="{{ project.cover_image.url }}" class="card-img-top" alt="{{ project.title }}">
         {% else %}
         <div class="card-img-top d-flex align-items-center justify-content-center placeholder" style="height: 200px;">
           <svg width="64" height="64" viewBox="0 0 16 16" fill="#adb5bd" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

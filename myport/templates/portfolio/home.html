@@ -1,21 +1,58 @@
 {% extends "portfolio/base.html" %}
 {% block title %}Home - My Portfolio{% endblock %}
+{% block extra_css %}
+<style>
+  .card-img-top { object-fit: cover; height: 200px; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.15); transition: all .2s ease; }
+  .project-badge { font-size: .75rem; }
+  @media (min-width: 768px) { .card-img-top { height: 220px; } }
+  @media (min-width: 1200px) { .card-img-top { height: 240px; } }
+  #projects { scroll-margin-top: 80px; }
+  .placeholder { background: repeating-linear-gradient(45deg, #f8f9fa, #f8f9fa 10px, #f1f3f5 10px, #f1f3f5 20px); }
+  .card-footer { background-color: white; }
+  .truncate-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+</style>
+{% endblock %}
 {% block content %}
-<h1 class="text-center mb-4">My Projects</h1>
-<div class="row g-4">
-  {% for project in projects %}
-  <div class="col-md-4">
-    <div class="card shadow-sm h-100">
-      <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}">
-      <div class="card-body">
-        <h5 class="card-title">{{ project.title }}</h5>
-        <p class="card-text">{{ project.description|truncatechars:100 }}</p>
-        <a href="{% url 'portfolio:project_detail' project.slug %}" class="btn btn-primary">View</a>
+<section id="projects">
+  <h1 class="text-center mb-4">My Projects</h1>
+  <div class="row g-4">
+    {% for project in projects %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100 border-0 shadow-sm">
+        {% if project.image %}
+        <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}">
+        {% else %}
+        <div class="card-img-top d-flex align-items-center justify-content-center placeholder" style="height: 200px;">
+          <svg width="64" height="64" viewBox="0 0 16 16" fill="#adb5bd" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M4.502 1a.5.5 0 0 1 .5.5V2h6a2 2 0 0 1 2 2v8.5a.5.5 0 0 1-1 0V4a1 1 0 0 0-1-1h-6v.5a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 4.502 1M2 5a2 2 0 0 1 2-2h1v1H4a1 1 0 0 0-1 1v7h8v1H3a1 1 0 0 1-1-1z"/>
+          </svg>
+        </div>
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title mb-2">{{ project.title }}</h5>
+          <p class="card-text text-muted truncate-2">{{ project.description|default:"No description provided." }}</p>
+        </div>
+        <div class="card-footer d-flex align-items-center justify-content-between">
+          <a href="{% url 'portfolio:project_detail' project.slug %}" class="btn btn-sm btn-primary">View details</a>
+          <span class="badge text-bg-light project-badge">{{ forloop.counter }}</span>
+        </div>
       </div>
     </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="text-center text-muted py-5">No projects yet.</div>
+    </div>
+    {% endfor %}
   </div>
-  {% empty %}
-  <p>No projects yet.</p>
-  {% endfor %}
-</div>
+</section>
+<section id="contact" class="mt-5">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <h2 class="h4">Get in touch</h2>
+      <p class="mb-3">Have a question or want to collaborate? Reach out anytime.</p>
+      <a class="btn btn-outline-primary" href="mailto:you@example.com">Email me</a>
+    </div>
+  </div>
+</section>
 {% endblock %}

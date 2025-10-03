@@ -14,11 +14,55 @@
 </style>
 {% endblock %}
 {% block content %}
-<section id="projects">
-  <h1 class="text-center mb-4">My Projects</h1>
+<section id="hero" class="py-5">
+  <div class="row align-items-center g-4">
+    <div class="col-12 col-lg-6" data-aos="fade-right">
+      <h1 class="display-5 mb-3">{{ profile.full_name|default:"Welcome" }}</h1>
+      <p class="lead text-muted mb-4">{{ profile.title|default:"Developer" }}</p>
+      <p class="mb-4">{{ profile.bio|default:"I build web applications and love great UX." }}</p>
+      <div class="d-flex gap-2">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="{% url 'portfolio:contact' %}" class="btn btn-outline-secondary">Contact</a>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 text-center" data-aos="fade-left">
+      {% if profile and profile.profile_image %}
+      <img src="{{ profile.profile_image.url }}" class="img-fluid rounded-circle shadow-sm" style="max-width: 280px;" alt="{{ profile.full_name }}">
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="py-5">
+  <h2 class="h3 text-center mb-4" data-aos="fade-up">Skills</h2>
+  <div class="row g-4">
+    {% for cat in skill_categories %}
+    <div class="col-md-6 col-lg-4" data-aos="zoom-in">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <h3 class="h5 mb-3">{{ cat.name }}</h3>
+          {% for s in cat.skills.all %}
+          <div class="mb-2">
+            <div class="d-flex justify-content-between"><span>{{ s.name }}</span><span class="text-muted">{{ s.level }}%</span></div>
+            <div class="progress" style="height: 6px;">
+              <div class="progress-bar" role="progressbar" style="width: {{ s.level }}%"></div>
+            </div>
+          </div>
+          {% empty %}
+          <p class="text-muted">No skills listed.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="projects" class="py-5">
+  <h2 class="h3 text-center mb-4" data-aos="fade-up">Projects</h2>
   <div class="row g-4">
     {% for project in projects %}
-    <div class="col-md-6 col-lg-4">
+    <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
       <div class="card h-100 border-0 shadow-sm">
         {% if project.cover_image %}
         <img src="{{ project.cover_image.url }}" class="card-img-top" alt="{{ project.title }}">
@@ -46,6 +90,31 @@
     {% endfor %}
   </div>
 </section>
+
+<section id="testimonials" class="py-5">
+  <h2 class="h3 text-center mb-4" data-aos="fade-up">What people say</h2>
+  <div class="row g-4">
+    {% for t in testimonials %}
+    <div class="col-md-6 col-lg-4" data-aos="zoom-in">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center mb-3 gap-3">
+            {% if t.photo %}<img src="{{ t.photo.url }}" class="rounded-circle" style="width:48px;height:48px;object-fit:cover;" alt="{{ t.name }}">{% endif %}
+            <div>
+              <div class="fw-semibold">{{ t.name }}</div>
+              <div class="text-muted small">{{ t.role }}</div>
+            </div>
+          </div>
+          <p class="mb-0">{{ t.feedback }}</p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12"><p class="text-center text-muted">No testimonials yet.</p></div>
+    {% endfor %}
+  </div>
+</section>
+
 <section id="contact" class="mt-5">
   <div class="card border-0 shadow-sm">
     <div class="card-body">
